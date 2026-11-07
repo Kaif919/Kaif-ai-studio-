@@ -1,0 +1,250 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kaif AI Studio</title>
+
+<style>
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: #080d18;
+  color: white;
+  min-height: 100vh;
+}
+
+header {
+  padding: 20px;
+  background: #111a2b;
+  border-bottom: 1px solid #29354b;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo {
+  background: linear-gradient(135deg,#00d9ff,#755cff);
+  padding: 10px;
+  border-radius: 12px;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+header h2 {
+  font-size: 20px;
+}
+
+header p {
+  font-size: 12px;
+  color: #aab5ca;
+  margin-top: 4px;
+}
+
+main {
+  max-width: 750px;
+  margin: auto;
+  padding: 25px 16px;
+}
+
+.welcome {
+  text-align: center;
+  margin: 55px 0 30px;
+}
+
+.welcome h1 {
+  font-size: 32px;
+  margin-bottom: 12px;
+  background: linear-gradient(90deg,#00d9ff,#9b7bff);
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.welcome p {
+  color: #aab5ca;
+  line-height: 1.6;
+}
+
+.suggestions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 25px 0;
+}
+
+.suggestions button {
+  padding: 15px;
+  background: #121e32;
+  border: 1px solid #2a3a54;
+  border-radius: 12px;
+  color: white;
+  text-align: left;
+  cursor: pointer;
+}
+
+.suggestions button:hover {
+  border-color: #00d9ff;
+}
+
+#chat {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin: 25px 0;
+}
+
+.message {
+  padding: 14px;
+  border-radius: 13px;
+  line-height: 1.6;
+  max-width: 90%;
+  white-space: pre-wrap;
+}
+
+.user {
+  background: #2455bb;
+  align-self: flex-end;
+}
+
+.bot {
+  background: #17243a;
+  border: 1px solid #2c3c56;
+  align-self: flex-start;
+}
+
+.input-area {
+  display: flex;
+  gap: 8px;
+  background: #111b2d;
+  border: 1px solid #34435c;
+  border-radius: 15px;
+  padding: 9px;
+  margin-top: 25px;
+}
+
+input {
+  flex: 1;
+  min-width: 0;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: white;
+  padding: 12px 8px;
+  font-size: 16px;
+}
+
+.send {
+  background: #00a9e9;
+  color: white;
+  border: none;
+  padding: 0 18px;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+footer {
+  text-align: center;
+  padding: 25px;
+  color: #8290a8;
+  font-size: 12px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">K</div>
+  <div>
+    <h2>Kaif AI Studio</h2>
+    <p>Your personal AI workspace</p>
+  </div>
+</header>
+
+<main>
+
+  <section class="welcome">
+    <h1>Hello, Welcome to Kaif AI!</h1>
+    <p>Your creative AI assistant is ready.<br>
+    What would you like to create today?</p>
+  </section>
+
+  <section class="suggestions">
+    <button onclick="quickAsk('Write a professional email')">
+      ✉️ Write an email
+    </button>
+    <button onclick="quickAsk('Write some Python code')">
+      💻 Write code
+    </button>
+    <button onclick="quickAsk('Give me a business idea')">
+      💡 Business ideas
+    </button>
+    <button onclick="quickAsk('Write a creative story')">
+      ✨ Create a story
+    </button>
+  </section>
+
+  <div id="chat"></div>
+
+  <div class="input-area">
+    <input id="userInput"
+      type="text"
+      placeholder="Ask Kaif AI anything..."
+      onkeydown="if(event.key==='Enter') sendMessage()">
+
+    <button class="send" onclick="sendMessage()">
+      Send ➤
+    </button>
+  </div>
+
+</main>
+
+<footer>
+  © 2026 Kaif AI Studio | Made with ❤️
+</footer>
+
+<script>
+function addMessage(text, type) {
+  const chat = document.getElementById("chat");
+  const message = document.createElement("div");
+
+  message.className = "message " + type;
+  message.textContent = text;
+
+  chat.appendChild(message);
+  message.scrollIntoView({behavior: "smooth"});
+}
+
+function sendMessage() {
+  const input = document.getElementById("userInput");
+  const text = input.value.trim();
+
+  if (!text) return;
+
+  addMessage(text, "user");
+  input.value = "";
+
+  setTimeout(() => {
+    addMessage(
+      "Welcome to Kaif AI Studio! Your chat interface is working. To get real AI answers, we will connect an AI API in the next step.",
+      "bot"
+    );
+  }, 500);
+}
+
+function quickAsk(text) {
+  document.getElementById("userInput").value = text;
+  sendMessage();
+}
+</script>
+
+</body>
+</html>
