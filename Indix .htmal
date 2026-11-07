@@ -1,0 +1,220 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kaif AI Studio</title>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  background:#080d18;color:white;
+  font-family:Arial,sans-serif;
+  min-height:100vh;
+}
+header{
+  padding:18px;
+  background:#111a2b;
+  border-bottom:1px solid #29354b;
+  display:flex;align-items:center;gap:12px;
+}
+.logo{
+  background:linear-gradient(135deg,#00d9ff,#755cff);
+  padding:12px;border-radius:12px;font-weight:bold;
+}
+header p{font-size:12px;color:#aab5ca;margin-top:5px}
+main{max-width:750px;margin:auto;padding:20px 15px}
+h1{
+  text-align:center;margin:25px 0 10px;
+  background:linear-gradient(90deg,#00d9ff,#a17bff);
+  -webkit-background-clip:text;color:transparent;
+}
+.subtitle{text-align:center;color:#aab5ca;margin-bottom:25px}
+.tabs{display:flex;gap:10px;margin-bottom:20px}
+.tabs button{
+  flex:1;padding:13px 5px;border-radius:10px;
+  border:1px solid #34435c;background:#17243a;color:white;
+}
+.tabs button.active{background:#087dbb;border-color:#00d9ff}
+.panel{
+  background:#111b2d;border:1px solid #2b3c55;
+  border-radius:16px;padding:18px;margin-bottom:18px;
+}
+label{display:block;margin:14px 0 8px;font-weight:bold}
+textarea,input,select{
+  width:100%;padding:13px;border-radius:10px;
+  border:1px solid #34435c;background:#080f1d;
+  color:white;font-size:15px;
+}
+textarea{height:110px;resize:vertical}
+.upload{
+  border:2px dashed #42617f;border-radius:12px;
+  padding:22px;text-align:center;margin-top:12px;
+  color:#b6c5d8;
+}
+.upload input{margin-top:12px}
+#preview{
+  display:none;width:100%;max-height:260px;
+  object-fit:contain;margin-top:15px;border-radius:12px;
+}
+.generate{
+  width:100%;padding:15px;border:0;border-radius:11px;
+  background:linear-gradient(90deg,#008bd1,#7955e9);
+  color:white;font-weight:bold;font-size:17px;
+  margin-top:20px;
+}
+.note{
+  color:#aab5ca;font-size:13px;line-height:1.6;
+  margin-top:14px;
+}
+.result{
+  background:#0b1525;border:1px solid #34435c;
+  padding:15px;border-radius:12px;margin-top:15px;
+  line-height:1.6;display:none;
+}
+footer{text-align:center;color:#8290a8;padding:25px;font-size:12px}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">K</div>
+  <div>
+    <h2>Kaif AI Studio</h2>
+    <p>Your Personal AI Creation Studio</p>
+  </div>
+</header>
+
+<main>
+
+<h1>Welcome to Kaif AI Studio</h1>
+<p class="subtitle">Create your imagination with AI ✨</p>
+
+<div class="tabs">
+  <button id="textTab" class="active" onclick="setMode('text')">
+    ✍️ Text to Video
+  </button>
+  <button id="photoTab" onclick="setMode('photo')">
+    🖼️ Photo to Video
+  </button>
+</div>
+
+<section class="panel">
+
+<h2 id="modeTitle">✍️ Text to Video</h2>
+
+<label>Describe your video</label>
+<textarea id="prompt" placeholder="Example: A beautiful cinematic sunset over the ocean, realistic lighting, smooth camera movement..."></textarea>
+
+<div id="photoBox" style="display:none">
+  <label>Upload your photo</label>
+  <div class="upload">
+    📷 Select an image from your phone
+    <input type="file" id="photo" accept="image/*">
+    <img id="preview" alt="Your uploaded photo">
+  </div>
+</div>
+
+<label>Video Style</label>
+<select id="style">
+  <option>Cinematic</option>
+  <option>Realistic</option>
+  <option>Anime</option>
+  <option>Nature</option>
+  <option>3D Animation</option>
+  <option>Social Media Reel</option>
+</select>
+
+<label>Video Format</label>
+<select id="format">
+  <option value="9:16">9:16 - Mobile Reel</option>
+  <option value="16:9">16:9 - YouTube</option>
+  <option value="1:1">1:1 - Square</option>
+</select>
+
+<button class="generate" onclick="generateVideo()">
+  ✨ Generate AI Video
+</button>
+
+<div class="result" id="result"></div>
+
+<p class="note">
+  Note: This is the first version of Kaif AI Studio.
+  Real AI video generation will work after connecting
+  a video generation API and secure backend.
+</p>
+
+</section>
+
+<section class="panel">
+<h3>🚀 More AI Tools</h3>
+<p class="note">
+  💬 AI Chat — Coming soon<br>
+  🎨 AI Image Generator — Coming soon<br>
+  🎙️ AI Voice — Coming soon<br>
+  💻 AI Coding Assistant — Coming soon
+</p>
+</section>
+
+</main>
+
+<footer>
+  © 2026 Kaif AI Studio | Created by Kaif
+</footer>
+
+<script>
+let currentMode = "text";
+
+function setMode(mode){
+  currentMode = mode;
+
+  document.getElementById("textTab").classList.toggle("active",mode==="text");
+  document.getElementById("photoTab").classList.toggle("active",mode==="photo");
+
+  document.getElementById("photoBox").style.display =
+    mode==="photo" ? "block" : "none";
+
+  document.getElementById("modeTitle").textContent =
+    mode==="photo" ? "🖼️ Photo to Video" : "✍️ Text to Video";
+
+  document.getElementById("result").style.display="none";
+}
+
+document.getElementById("photo").addEventListener("change",function(){
+  const file=this.files[0];
+  if(!file)return;
+
+  const preview=document.getElementById("preview");
+  preview.src=URL.createObjectURL(file);
+  preview.style.display="block";
+});
+
+function generateVideo(){
+  const prompt=document.getElementById("prompt").value.trim();
+  const result=document.getElementById("result");
+  const photo=document.getElementById("photo").files[0];
+
+  if(!prompt){
+    alert("Please describe your video first!");
+    return;
+  }
+
+  if(currentMode==="photo" && !photo){
+    alert("Please upload a photo first!");
+    return;
+  }
+
+  result.style.display="block";
+  result.textContent=
+    "✅ Your video settings are ready! Mode: "+
+    (currentMode==="text"?"Text to Video":"Photo to Video")+
+    ". Style: "+document.getElementById("style").value+
+    ". Format: "+document.getElementById("format").value+
+    ". Real video generation will be enabled after connecting the AI video API and backend.";
+}
+</script>
+
+</body>
+</html>
